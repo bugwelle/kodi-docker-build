@@ -1,0 +1,30 @@
+FROM ubuntu:disco
+
+RUN apt-get update && \
+    apt-get -y --no-install-recommends install \
+        debhelper autoconf automake autopoint gettext \
+        autotools-dev cmake curl default-jre doxygen flatbuffers-dev \
+        gawk gcc gdc gperf libasound2-dev libass-dev libavahi-client-dev \
+        libavahi-common-dev libbluetooth-dev libbluray-dev libbz2-dev \
+        libcdio-dev libp8-platform-dev libcrossguid-dev libcurl4-openssl-dev \
+        libcwiid-dev libdbus-1-dev libegl1-mesa-dev libenca-dev libflac-dev \
+        libfontconfig-dev libfreetype6-dev libfribidi-dev libfstrcmp-dev \
+        libgcrypt-dev libgif-dev libgles2-mesa-dev libgl1-mesa-dev \
+        libglu1-mesa-dev libgnutls28-dev libgpg-error-dev libiso9660-dev \
+        libjpeg-dev liblcms2-dev libltdl-dev liblzo2-dev libmicrohttpd-dev \
+        libmysqlclient-dev libnfs-dev libogg-dev libpcre3-dev libplist-dev \
+        libpng-dev libpulse-dev libshairplay-dev libsmbclient-dev \
+        libsqlite3-dev libssl-dev libtag1-dev libtiff5-dev libtinyxml-dev \
+        libtool libudev-dev libva-dev libvdpau-dev libvorbis-dev libxmu-dev \
+        libxrandr-dev libxslt1-dev libxt-dev lsb-release python-dev \
+        python-pil rapidjson-dev swig unzip uuid-dev yasm zip zlib1g-dev
+
+# Ubuntu 18.04 specific
+# RUN apt install libcec-dev libfmt-dev liblirc-dev
+
+# Clone and build
+RUN git clone https://github.com/xbmc/xbmc kodi && \
+    cd kodi                                     && \
+    mkdir build && cd $_                        && \
+    cmake ..                                    && \
+    make -j4
