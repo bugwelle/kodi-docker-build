@@ -26,9 +26,11 @@ RUN dnf install -y alsa-lib-devel autoconf automake avahi-compat-libdns_sd-devel
 # Required for Fedora >= 29
 RUN dnf install -y libunistring
 
+RUN dnf search libunistring
+
 # Clone and build
-RUN git clone --depth 1 https://github.com/xbmc/xbmc kodi && \
-    cd kodi                                               && \
+RUN git clone --depth 1 https://github.com/xbmc/xbmc /tmp/kodi
+RUN cd /tmp/kodi                                          && \
     mkdir build && cd $_                                  && \
     cmake ..                                              && \
     make -j4

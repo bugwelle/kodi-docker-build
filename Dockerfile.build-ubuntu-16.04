@@ -29,6 +29,7 @@ RUN cd /tmp/kodi                                                 && \
     make -C tools/depends/target/p8-platform  PREFIX=/usr/local && \
     cd /tmp/kodi                                                && \
     make -C tools/depends/target/libshairplay PREFIX=/usr/local && \
+    cd /tmp/kodi                                                && \
     mkdir build && cd $_                                        && \
     cmake ..                                                    && \
     make -j4
