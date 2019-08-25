@@ -17,8 +17,13 @@ RUN zypper --non-interactive install alsa-devel autoconf automake bluez-devel bo
         libsmbclient-devel libtag-devel libtiff-devel libtool libudev-devel libuuid-devel \
         libva-devel libvdpau-devel libvorbis-devel libXrandr-devel libXrender-devel \
         libxslt-devel lirc-devel lzo-devel make Mesa-libEGL-devel Mesa-libGLESv2-devel \
-        Mesa-libGLESv3-devel nasm patch pcre-devel python-devel randrproto-devel \
-        renderproto-devel shairplay-devel sqlite3-devel swig tinyxml-devel
+        Mesa-libGLESv3-devel nasm patch pcre-devel python-devel \
+        shairplay-devel sqlite3-devel swig tinyxml-devel
+
+# Not found: randrproto-devel
+#            renderproto-devel
+
+RUN zypper --non-interactive install git
 
 # Clone and build
 RUN git clone https://github.com/xbmc/xbmc kodi && \

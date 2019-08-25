@@ -20,6 +20,9 @@ RUN dnf install -y alsa-lib-devel autoconf automake avahi-compat-libdns_sd-devel
     python-devel python-pillow rapidjson-devel shairplay-devel sqlite-devel \
     swig taglib-devel tinyxml-devel trousers-devel uuid-devel yasm zlib-devel
 
+# Required for Fedora >= 29; just checking if available here as well
+RUN dnf install -y libunistring
+
 # Clone and build
 RUN git clone --depth 1 https://github.com/xbmc/xbmc kodi && \
     cd kodi                                               && \
