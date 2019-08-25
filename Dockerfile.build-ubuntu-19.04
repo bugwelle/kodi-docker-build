@@ -20,18 +20,22 @@ RUN apt-get update && \
         python-pil rapidjson-dev swig unzip uuid-dev yasm zip zlib1g-dev
 
 # Ubuntu 18.04 specific
-RUN apt-get install -y libcec-dev libfmt-dev liblirc-dev
+RUN apt-get install -y --no-install-recommends \
+        libcec-dev libfmt-dev liblirc-dev
 
 RUN apt-get install -y --no-install-recommends \
         git
 
 # Clone and build
 RUN git clone https://github.com/xbmc/xbmc /tmp/kodi
+
 RUN cd /tmp/kodi                                                 && \
-    make -C tools/depends/target/flatbuffers  PREFIX=/usr/local && \
-    cd /tmp/kodi                                                && \
-    make -C tools/depends/target/libshairplay PREFIX=/usr/local && \
-    cd /tmp/kodi                                                && \
-    mkdir build && cd $_                                        && \
+    make -C tools/depends/target/flatbuffers  PREFIX=/usr/local
+
+RUN cd /tmp/kodi                                                && \
+    make -C tools/depends/target/libshairplay PREFIX=/usr/local
+
+RUN cd /tmp/kodi                                                && \
+    mkdir build && cd build                                     && \
     cmake ..                                                    && \
     make -j4
