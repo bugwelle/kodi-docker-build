@@ -1,0 +1,64 @@
+FROM ubuntu:groovy
+
+# This Docker Image tests Kodi's build-guide.
+
+# Kodi Dependencies:
+# https://github.com/xbmc/xbmc/blob/master/docs/README.Ubuntu.md#32-get-build-dependencies-manually
+RUN apt-get update && \
+    apt-get -y --no-install-recommends install \
+        debhelper autoconf automake autopoint gettext autotools-dev \
+        cmake curl default-jre doxygen gawk gcc gdc gperf \
+        libasound2-dev libass-dev libavahi-client-dev libavahi-common-dev \
+        libbluetooth-dev libbluray-dev libbz2-dev libcdio-dev \
+        libp8-platform-dev libcrossguid-dev libcurl4-openssl-dev \
+        libcwiid-dev libdbus-1-dev libegl1-mesa-dev libenca-dev \
+        libflac-dev libfmt-dev libfontconfig-dev \
+        libfreetype6-dev libfribidi-dev libfstrcmp-dev libgcrypt-dev \
+        libgif-dev libgles2-mesa-dev libgl1-mesa-dev libglu1-mesa-dev \
+        libgnutls28-dev libgpg-error-dev libgtest-dev libiso9660-dev \
+        libjpeg-dev liblcms2-dev libltdl-dev liblzo2-dev libmicrohttpd-dev \
+        libmysqlclient-dev libnfs-dev libogg-dev libpcre3-dev \
+        libplist-dev libpng-dev libpulse-dev libshairplay-dev \
+        libsmbclient-dev libspdlog-dev libsqlite3-dev libssl-dev \
+        libtag1-dev libtiff5-dev libtinyxml-dev libtool libudev-dev \
+        libva-dev libvdpau-dev libvorbis-dev libxmu-dev libxrandr-dev \
+        libxslt1-dev libxt-dev lsb-release meson nasm ninja-build \
+        python3-dev python3-pil python3-pip rapidjson-dev swig unzip \
+        uuid-dev yasm zip zlib1g-dev
+
+# The following packages could not be found:
+#  - flatbuffers-dev
+
+# If you're using Ubuntu 18.04 and later, you also need to install:
+RUN apt-get install -y --no-install-recommends \
+        libcec-dev libfmt-dev liblirc-dev
+
+# Optional packages that you might want to install for extra functionality
+# (generating doxygen documentation, for instance):
+RUN apt-get install -y --no-install-recommends \
+    doxygen libcap-dev libsndio-dev libmariadbd-dev
+
+# This dependency is required but not part of the build-guide
+RUN apt-get install -y --no-install-recommends \
+        libdrm-dev libunistring-dev
+
+# Dev dependencies, not required by Kodi's build-guide
+RUN apt-get install -y --no-install-recommends \
+        git gcc g++
+
+# Clone and build
+RUN git clone https://github.com/xbmc/xbmc /kodi
+
+
+RUN cd /kodi && \
+    make -C tools/depends/target/flatbuffers  PREFIX=/usr/local
+
+RUN cd /kodi                  && \
+    mkdir build && cd build   && \
+    cmake .. \
+        -DCMAKE_INSTALL_PREFIX=/usr/local \
+        -DCORE_PLATFORM_NAME=x11 \
+        -DAPP_RENDER_SYSTEM=gl \
+        -GNinja \
+    && \
+    ninja
